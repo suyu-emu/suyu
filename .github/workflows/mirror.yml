@@ -1,0 +1,83 @@
+name: Mirror Git
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: write
+      contents: write
+      pages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Clone Git Repo
+      run: |
+        URLS=$URLS
+        REPO=$REPO
+        for URLS in $(echo $URLS | tr "," "\n"); do
+           if git clone --branch $BRANCH $URLS/$REPO.git mirror; then
+             break 2
+           fi
+        done
+      env:
+        URLS: ${{ secrets.URLS }}
+        REPO: ${{ secrets.REPO }}
+        BRANCH: ${{ secrets.BRANCH }}
+
+    - name: Copy GitHub Action file to cloned repo
+      run: |
+        mkdir -p mirror/.github/workflows/
+        cp .github/workflows/mirror.yml mirror/.github/workflows/
+
+    - name: Commit and force push to GitHub
+      run: |
+        cd mirror
+        git remote set-url origin https://github.com/${{ github.repository }}.git
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add .
+        git commit -m "Add GitHub Action file"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.TOKEN }}
+        repository: ${{ github.repository }}
+        branch: ${{ github.ref }}
+        github_url: https://github.com
+        directory: ./mirror
+        force: true
+
+    - name: Release Info
+      id: info
+      run: |
+        response=$(curl -s "https://git.suyu.dev/api/v1/repos/suyu/suyu/releases")
+        name=$(echo "$response" | jq -r '.[0].name')
+        tag=$(echo "$response" | jq -r '.[0].tag_name')
+        description=$(echo "$response" | jq -r '.[0].body')
+        links=$(echo "$response" | jq -r '.[0].assets[]? | select(has("browser_download_url") and has("name")) | "- [\(.name)](\(.browser_download_url))"')
+
+        echo "::set-output name=name::$name"
+        echo "::set-output name=tag::$name"
+
+        echo "## Changes" > description.txt
+        echo "${description}" >> description.txt
+        echo "## Downloads" >> description.txt
+        echo "${links}" >> description.txt
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        makeLatest: true
+        skipIfReleaseExists: true
+        tag: ${{ steps.info.outputs.tag }}
+        name: ${{ steps.info.outputs.name }}
+        bodyFile: "description.txt"
