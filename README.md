@@ -9,6 +9,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 We're in need of developers. Please join our chat below if you want to contribute!
 This repo is based on Yuzu EA 4176.
 
+Support the original suyu developer team [here](https://discord.gg/ajz5hdrZ)
 <hr />
 
 <h1 align="center">
@@ -48,10 +49,10 @@ We currently have builds over at the [Releases](https://git.suyu.dev/suyu/suyu/r
 
 This project is completely free and open source, and anyone can contribute to help improve suyu.
 
-Most of the development happens on GitLab. For development discussion, please join us in our [Chat](https://chat.suyu.dev).
+Most of the development happens on Git. For development discussion, please join us in our [Chat](https://chat.suyu.dev).
 
 If you want to contribute, please take a look at the [Contributor's Guide](https://git.suyu.dev/suyu/suyu/wiki/Contributing) and [Developer Information](https://git.suyu.dev/suyu/suyu/wiki/Developer-Information).
-You can also contact any of the developers on Discord to learn more about the current state of suyu.
+You can also contact any of the developers on Discord or the Chat to learn more about the current state of suyu.
 
 ## Downloads
 
@@ -78,6 +79,7 @@ We have official builds [here.](https://git.suyu.dev/suyu/suyu/releases) If any 
 ## Support
 
 If you have any questions, don't hesitate to ask us in our [chat](https://chat.suyu.dev). We don't bite!
+For the latest news, we recommend the [Suyuzudatchi Discord](https://discord.gg/MVuzv7AMbr) which covers many topic relating to suyu and other projects
 
 
 ## License
