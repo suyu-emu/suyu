@@ -4,23 +4,37 @@ SPDX-License-Identifier: GPL-2.0-or-later
 -->
 
 <RCC>
+    <!-- Default style -->
+    <qresource prefix="default">
+        <file>style.qss</file>
+    </qresource>
+
+    <!-- Default icons -->
     <qresource prefix="icons/default">
-        <!-- "colorful" is now the default theme, add new icons there -->
         <file alias="index.theme">icons/index.theme</file>
         <file alias="16x16/connected.png">icons/16x16/connected.png</file>
         <file alias="16x16/connected_notification.png">icons/16x16/connected_notification.png</file>
         <file alias="16x16/disconnected.png">icons/16x16/disconnected.png</file>
+        <file alias="16x16/failed.png">icons/16x16/failed.png</file>
+        <file alias="16x16/info.png">icons/16x16/info.png</file>
         <file alias="16x16/lock.png">icons/16x16/lock.png</file>
+        <file alias="16x16/sync.png">icons/16x16/sync.png</file>
+        <file alias="16x16/view-refresh.png">icons/16x16/view-refresh.png</file>
         <file alias="48x48/bad_folder.png">icons/48x48/bad_folder.png</file>
         <file alias="48x48/chip.png">icons/48x48/chip.png</file>
         <file alias="48x48/folder.png">icons/48x48/folder.png</file>
         <file alias="48x48/list-add.png">icons/48x48/list-add.png</file>
+        <file alias="48x48/no_avatar.png">icons/48x48/no_avatar.png</file>
         <file alias="48x48/sd_card.png">icons/48x48/sd_card.png</file>
         <file alias="48x48/star.png">icons/48x48/star.png</file>
         <file alias="256x256/plus_folder.png">icons/256x256/plus_folder.png</file>
         <file alias="256x256/suyu.png">icons/256x256/suyu.png</file>
     </qresource>
-    <qresource prefix="default">
-        <file>style.qss</file>
+
+    <!-- Dark variant icons -->
+    <qresource prefix="icons/default_dark">
+        <file alias="index.theme">../default_dark/icons/index.theme</file>
+        <file alias="16x16/lock.png">../default_dark/icons/16x16/lock.png</file>
+        <file alias="16x16/view-refresh.png">../default_dark/icons/16x16/view-refresh.png</file>
     </qresource>
 </RCC>

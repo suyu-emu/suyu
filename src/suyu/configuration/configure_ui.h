@@ -34,6 +34,7 @@ signals:
     void LanguageChanged(const QString& locale);
 
 private:
+    void UpdateDarkModeOptions();
     void RequestGameListUpdate();
 
     void SetConfiguration();

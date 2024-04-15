@@ -121,6 +121,7 @@ public:
         GenerateSuyuPath(SuyuPath::ConfigDir, suyu_path_config);
         GenerateSuyuPath(SuyuPath::CrashDumpsDir, suyu_path / CRASH_DUMPS_DIR);
         GenerateSuyuPath(SuyuPath::DumpDir, suyu_path / DUMP_DIR);
+        GenerateSuyuPath(SuyuPath::IconsDir, suyu_path / ICONS_DIR);
         GenerateSuyuPath(SuyuPath::KeysDir, suyu_path / KEYS_DIR);
         GenerateSuyuPath(SuyuPath::LoadDir, suyu_path / LOAD_DIR);
         GenerateSuyuPath(SuyuPath::LogDir, suyu_path / LOG_DIR);
@@ -130,7 +131,7 @@ public:
         GenerateSuyuPath(SuyuPath::SDMCDir, suyu_path / SDMC_DIR);
         GenerateSuyuPath(SuyuPath::ShaderDir, suyu_path / SHADER_DIR);
         GenerateSuyuPath(SuyuPath::TASDir, suyu_path / TAS_DIR);
-        GenerateSuyuPath(SuyuPath::IconsDir, suyu_path / ICONS_DIR);
+        GenerateSuyuPath(SuyuPath::ThemesDir, suyu_path / THEMES_DIR);
     }
 
 private:

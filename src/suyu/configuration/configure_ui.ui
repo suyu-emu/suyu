@@ -63,6 +63,20 @@
           </item>
          </layout>
         </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="dark_mode_label">
+            <property name="text">
+             <string>Dark Mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="dark_mode_combobox"/>
+          </item>
+         </layout>
+        </item>
        </layout>
       </item>
      </layout>

@@ -35,9 +35,8 @@ constexpr std::array<std::array<Qt::GlobalColor, 2>, 10> WaitTreeColors{{
 }};
 
 bool IsDarkTheme() {
-    const auto& theme = UISettings::values.theme;
-    return theme == std::string("qdarkstyle") || theme == std::string("qdarkstyle_midnight_blue") ||
-           theme == std::string("colorful_dark") || theme == std::string("colorful_midnight_blue");
+    return UISettings::values.theme.contains(QStringLiteral("dark")) ||
+           UISettings::values.theme.contains(QStringLiteral("midnight"));
 }
 
 } // namespace

@@ -1,0 +1,33 @@
+<!--
+SPDX-FileCopyrightText: 2018 yuzu Emulator Project & 2024 suyu Emulator Project
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
+
+<RCC>
+    <!-- Theme is always dark, so we always use the same icons -->
+
+    <qresource prefix="icons/qdarkstyle_monochrome">
+        <file alias="index.theme">icons/index.theme</file>
+        <file alias="16x16/lock.png">../monochrome_dark/icons/16x16/lock.png</file>
+        <file alias="48x48/bad_folder.png">../monochrome_dark/icons/48x48/bad_folder.png</file>
+        <file alias="48x48/chip.png">../monochrome_dark/icons/48x48/chip.png</file>
+        <file alias="48x48/folder.png">../monochrome_dark/icons/48x48/folder.png</file>
+        <file alias="48x48/list-add.png">../monochrome_dark/icons/48x48/list-add.png</file>
+        <file alias="48x48/sd_card.png">../monochrome_dark/icons/48x48/sd_card.png</file>
+        <file alias="48x48/star.png">../monochrome_dark/icons/48x48/star.png</file>
+        <file alias="256x256/plus_folder.png">../monochrome_dark/icons/256x256/plus_folder.png</file>
+    </qresource>
+
+    <qresource prefix="icons/qdarkstyle_monochrome_dark">
+        <file alias="index.theme">icons/index.theme</file>
+        <file alias="16x16/lock.png">../monochrome_dark/icons/16x16/lock.png</file>
+        <file alias="48x48/bad_folder.png">../monochrome_dark/icons/48x48/bad_folder.png</file>
+        <file alias="48x48/chip.png">../monochrome_dark/icons/48x48/chip.png</file>
+        <file alias="48x48/folder.png">../monochrome_dark/icons/48x48/folder.png</file>
+        <file alias="48x48/list-add.png">../monochrome_dark/icons/48x48/list-add.png</file>
+        <file alias="48x48/no_avatar.png">../monochrome_dark/icons/48x48/no_avatar.png</file>
+        <file alias="48x48/sd_card.png">../monochrome_dark/icons/48x48/sd_card.png</file>
+        <file alias="48x48/star.png">../monochrome_dark/icons/48x48/star.png</file>
+        <file alias="256x256/plus_folder.png">../monochrome_dark/icons/256x256/plus_folder.png</file>
+    </qresource>
+</RCC>

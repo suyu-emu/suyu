@@ -372,6 +372,14 @@ QtSoftwareKeyboardDialog::~QtSoftwareKeyboardDialog() {
     StopInputThread();
 }
 
+QString QtSoftwareKeyboardDialog::theme() {
+    if (GMainWindow::CheckDarkMode()) {
+        return QStringLiteral("_dark");
+    } else {
+        return QString{};
+    }
+}
+
 void QtSoftwareKeyboardDialog::ShowNormalKeyboard(QPoint pos, QSize size) {
     if (isVisible()) {
         return;
@@ -382,6 +390,7 @@ void QtSoftwareKeyboardDialog::ShowNormalKeyboard(QPoint pos, QSize size) {
     SetKeyboardType();
     SetPasswordMode();
     SetControllerImage();
+    SetButtonImages();
     DisableKeyboardButtons();
     SetBackspaceOkEnabled();
 
@@ -449,6 +458,7 @@ void QtSoftwareKeyboardDialog::ShowInlineKeyboard(
 
     SetKeyboardType();
     SetControllerImage();
+    SetButtonImages();
     DisableKeyboardButtons();
     SetBackspaceOkEnabled();
 
@@ -822,66 +832,144 @@ void QtSoftwareKeyboardDialog::SetControllerImage() {
     const auto controller_type =
         handheld->IsConnected() ? handheld->GetNpadStyleIndex() : player_1->GetNpadStyleIndex();
 
-    const QString theme = [] {
-        if (QIcon::themeName().contains(QStringLiteral("dark")) ||
-            QIcon::themeName().contains(QStringLiteral("midnight"))) {
-            return QStringLiteral("_dark");
-        } else {
-            return QString{};
-        }
-    }();
-
     switch (controller_type) {
     case Core::HID::NpadStyleIndex::Fullkey:
     case Core::HID::NpadStyleIndex::GameCube:
         ui->icon_controller->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_pro%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_pro.png);").arg(theme()));
         ui->icon_controller_shift->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_pro%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_pro.png);").arg(theme()));
         ui->icon_controller_num->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_pro%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_pro.png);").arg(theme()));
         break;
     case Core::HID::NpadStyleIndex::JoyconDual:
         ui->icon_controller->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_dual_joycon%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_dual_joycon.png);").arg(theme()));
         ui->icon_controller_shift->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_dual_joycon%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_dual_joycon.png);").arg(theme()));
         ui->icon_controller_num->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_dual_joycon%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_dual_joycon.png);").arg(theme()));
         break;
     case Core::HID::NpadStyleIndex::JoyconLeft:
         ui->icon_controller->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_single_joycon_left%1.png);")
-                .arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_single_joycon_left.png);")
+                .arg(theme()));
         ui->icon_controller_shift->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_single_joycon_left%1.png);")
-                .arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_single_joycon_left.png);")
+                .arg(theme()));
         ui->icon_controller_num->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_single_joycon_left%1.png);")
-                .arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_single_joycon_left.png);")
+                .arg(theme()));
         break;
     case Core::HID::NpadStyleIndex::JoyconRight:
         ui->icon_controller->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_single_joycon_right%1.png);")
-                .arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_single_joycon_right.png);")
+                .arg(theme()));
         ui->icon_controller_shift->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_single_joycon_right%1.png);")
-                .arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_single_joycon_right.png);")
+                .arg(theme()));
         ui->icon_controller_num->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_single_joycon_right%1.png);")
-                .arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_single_joycon_right.png);")
+                .arg(theme()));
         break;
     case Core::HID::NpadStyleIndex::Handheld:
         ui->icon_controller->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_handheld%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_handheld.png);").arg(theme()));
         ui->icon_controller_shift->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_handheld%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_handheld.png);").arg(theme()));
         ui->icon_controller_num->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/controller_handheld%1.png);").arg(theme));
+            QStringLiteral("image: url(:/overlay%1/controller_handheld.png);").arg(theme()));
         break;
     default:
         break;
     }
+}
+
+void QtSoftwareKeyboardDialog::SetButtonImages() {
+    QString button_backspace_stylesheet =
+        QStringLiteral("QPushButton {"
+                       " image: url(:/overlay%1/osk_button_B.png);"
+                       " image-position: right;"
+                       " qproperty-icon: url(:/overlay%1/osk_button_backspace.png); }"
+                       "QPushButton:disabled { image: url(:/overlay%1/osk_button_B_disabled.png);}")
+            .arg(theme());
+    ui->button_backspace->setStyleSheet(button_backspace_stylesheet);
+    ui->button_backspace_shift->setStyleSheet(button_backspace_stylesheet);
+    ui->button_backspace_shift->setIconSize(ui->button_backspace->iconSize());
+    ui->button_backspace_num->setStyleSheet(button_backspace_stylesheet);
+
+    QString button_space_stylesheet =
+        QStringLiteral("QPushButton {"
+                       " image: url(:/overlay%1/osk_button_Y.png);"
+                       " image-position: right;"
+                       " qproperty-icon: url(:/overlay%1/osk_button_space.png); }"
+                       "QPushButton:disabled { image: url(:/overlay%1/osk_button_Y_disabled.png);}")
+            .arg(theme());
+    ui->button_space->setStyleSheet(button_space_stylesheet);
+    ui->button_space_shift->setStyleSheet(button_space_stylesheet);
+
+    QString button_ok_stylesheet =
+        QStringLiteral(
+            "QPushButton { image: url(:/overlay%1/osk_button_plus.png); }"
+            "QPushButton:disabled { image: url(:/overlay%1/osk_button_plus_disabled.png); }")
+            .arg(theme());
+    ui->button_ok->setStyleSheet(button_ok_stylesheet);
+    ui->button_ok_shift->setStyleSheet(button_ok_stylesheet);
+    ui->button_ok_num->setStyleSheet(button_ok_stylesheet);
+
+    QString button_shift_stylesheet =
+        QStringLiteral("image: url(:/overlay/osk_button_shift_lock_off.png);"
+                       "image-position: left;"
+                       "qproperty-icon: url(:/overlay%1/osk_button_shift.png);")
+            .arg(theme());
+    ui->button_shift->setStyleSheet(button_shift_stylesheet);
+
+    QString button_shift_shift_stylesheet =
+        QStringLiteral("image: url(:/overlay/osk_button_shift_lock_off.png);"
+                       "image-position: left;"
+                       "qproperty-icon: url(:/overlay%1/osk_button_shift_on.png);")
+            .arg(theme());
+    ui->button_shift_shift->setStyleSheet(button_shift_shift_stylesheet);
+    ui->button_shift_shift->setIconSize(ui->button_shift->iconSize());
+
+    QString L_stylesheet = QStringLiteral("image: url(:/overlay%1/button_L.png);").arg(theme());
+    ui->button_L->setStyleSheet(L_stylesheet);
+    ui->button_L_shift->setStyleSheet(L_stylesheet);
+    ui->button_L_num->setStyleSheet(L_stylesheet);
+
+    QString R_stylesheet = QStringLiteral("image: url(:/overlay%1/button_R.png);").arg(theme());
+    ui->button_R->setStyleSheet(R_stylesheet);
+    ui->button_R_shift->setStyleSheet(R_stylesheet);
+    ui->button_R_num->setStyleSheet(R_stylesheet);
+
+    QString arrow_left_stylesheet =
+        QStringLiteral("image: url(:/overlay%1/arrow_left.png);").arg(theme());
+    ui->arrow_left->setStyleSheet(arrow_left_stylesheet);
+    ui->arrow_left_shift->setStyleSheet(arrow_left_stylesheet);
+    ui->arrow_left_num->setStyleSheet(arrow_left_stylesheet);
+
+    QString arrow_right_stylesheet =
+        QStringLiteral("image: url(:/overlay%1/arrow_right.png);").arg(theme());
+    ui->arrow_right->setStyleSheet(arrow_right_stylesheet);
+    ui->arrow_right_shift->setStyleSheet(arrow_right_stylesheet);
+    ui->arrow_right_num->setStyleSheet(arrow_right_stylesheet);
+
+    QString button_press_stick_stylesheet =
+        QStringLiteral("image: url(:/overlay%1/button_press_stick.png);").arg(theme());
+    ui->button_press_stick->setStyleSheet(button_press_stick_stylesheet);
+    ui->button_press_stick_shift->setStyleSheet(button_press_stick_stylesheet);
+
+    QString button_X_stylesheet =
+        QStringLiteral("image: url(:/overlay%1/button_X.png);").arg(theme());
+    ui->button_X->setStyleSheet(button_X_stylesheet);
+    ui->button_X_shift->setStyleSheet(button_X_stylesheet);
+    ui->button_X_num->setStyleSheet(button_X_stylesheet);
+
+    QString button_A_stylesheet =
+        QStringLiteral("image: url(:/overlay%1/button_A.png);").arg(theme());
+    ui->button_A->setStyleSheet(button_A_stylesheet);
+    ui->button_A_shift->setStyleSheet(button_A_stylesheet);
+    ui->button_A_num->setStyleSheet(button_A_stylesheet);
 }
 
 void QtSoftwareKeyboardDialog::DisableKeyboardButtons() {
@@ -1050,10 +1138,8 @@ void QtSoftwareKeyboardDialog::ChangeBottomOSKIndex() {
         ui->bottomOSK->setCurrentIndex(static_cast<int>(bottom_osk_index));
 
         ui->button_shift_shift->setStyleSheet(
-            QStringLiteral("image: url(:/overlay/osk_button_shift_lock_off.png);"
-                           "\nimage-position: left;"));
+            QStringLiteral("image: url(:/overlay/osk_button_shift_lock_off.png);"));
 
-        ui->button_shift_shift->setIconSize(ui->button_shift->iconSize());
         ui->button_backspace_shift->setIconSize(ui->button_backspace->iconSize());
         break;
     case BottomOSKIndex::UpperCase:
@@ -1063,9 +1149,6 @@ void QtSoftwareKeyboardDialog::ChangeBottomOSKIndex() {
             ui->button_shift_shift->setStyleSheet(
                 QStringLiteral("image: url(:/overlay/osk_button_shift_lock_off.png);"
                                "\nimage-position: left;"));
-
-            ui->button_shift_shift->setIconSize(ui->button_shift->iconSize());
-            ui->button_backspace_shift->setIconSize(ui->button_backspace->iconSize());
 
             ui->label_shift_shift->setText(QStringLiteral("Caps Lock"));
 
@@ -1077,9 +1160,6 @@ void QtSoftwareKeyboardDialog::ChangeBottomOSKIndex() {
             ui->button_shift_shift->setStyleSheet(
                 QStringLiteral("image: url(:/overlay/osk_button_shift_lock_on.png);"
                                "\nimage-position: left;"));
-
-            ui->button_shift_shift->setIconSize(ui->button_shift->iconSize());
-            ui->button_backspace_shift->setIconSize(ui->button_backspace->iconSize());
 
             ui->label_shift_shift->setText(QStringLiteral("Caps Lock Off"));
         }

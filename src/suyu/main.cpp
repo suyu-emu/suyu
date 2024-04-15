@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+
 #include "core/hle/service/am/applet_manager.h"
 #include "core/loader/nca.h"
 #include "core/loader/nro.h"
@@ -18,6 +19,9 @@
 #endif
 #ifdef __unix__
 #include <csignal>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusMessage>
+#include <QtDBus/QtDBus>
 #include <sys/socket.h>
 #include "common/linux/gamemode.h"
 #endif
@@ -281,18 +285,6 @@ static void OverrideWindowsFont() {
 }
 #endif
 
-bool GMainWindow::CheckDarkMode() {
-#ifdef __unix__
-    const QPalette test_palette(qApp->palette());
-    const QColor text_color = test_palette.color(QPalette::Active, QPalette::Text);
-    const QColor window_color = test_palette.color(QPalette::Active, QPalette::Window);
-    return (text_color.value() > window_color.value());
-#else
-    // TODO: Windows
-    return false;
-#endif // __unix__
-}
-
 GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulkan)
     : ui{std::make_unique<Ui::MainWindow>()}, system{std::make_unique<Core::System>()},
       input_subsystem{std::make_shared<InputCommon::InputSubsystem>()}, config{std::move(config_)},
@@ -313,15 +305,12 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
     ui->setupUi(this);
     statusBar()->hide();
 
-    // Check dark mode before a theme is loaded
-    os_dark_mode = CheckDarkMode();
     startup_icon_theme = QIcon::themeName();
-    // fallback can only be set once, colorful theme icons are okay on both light/dark
-    QIcon::setFallbackThemeName(QStringLiteral("colorful"));
+    // fallback can only be set once, default theme icons are okay on both light/dark
+    QIcon::setFallbackThemeName(QStringLiteral("default"));
     QIcon::setFallbackSearchPaths(QStringList(QStringLiteral(":/icons")));
 
     default_theme_paths = QIcon::themeSearchPaths();
-    UpdateUITheme();
 
     SetDiscordEnabled(UISettings::values.enable_discord_presence.GetValue());
     discord_rpc->Update();
@@ -339,6 +328,7 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
 
     SetDefaultUIGeometry();
     RestoreUIState();
+    UpdateUITheme();
 
     ConnectMenuEvents();
     ConnectWidgetEvents();
@@ -459,7 +449,10 @@ GMainWindow::GMainWindow(std::unique_ptr<QtConfig> config_, bool has_broken_vulk
     SDL_EnableScreenSaver();
 #endif
 
+#ifdef __unix__
     SetupPrepareForSleep();
+    ListenColorSchemeChange();
+#endif
 
     QStringList args = QApplication::arguments();
 
@@ -1658,8 +1651,8 @@ void GMainWindow::OnDisplayTitleBars(bool show) {
     }
 }
 
-void GMainWindow::SetupPrepareForSleep() {
 #ifdef __unix__
+void GMainWindow::SetupPrepareForSleep() {
     auto bus = QDBusConnection::systemBus();
     if (bus.isConnected()) {
         const bool success = bus.connect(
@@ -1673,8 +1666,8 @@ void GMainWindow::SetupPrepareForSleep() {
     } else {
         LOG_WARNING(Frontend, "QDBusConnection system bus is not connected");
     }
-#endif // __unix__
 }
+#endif // __unix__
 
 void GMainWindow::OnPrepareForSleep(bool prepare_sleep) {
     if (emu_thread == nullptr) {
@@ -3730,7 +3723,8 @@ void GMainWindow::ResetWindowSize1080() {
 }
 
 void GMainWindow::OnConfigure() {
-    const auto old_theme = UISettings::values.theme;
+    const QString old_theme = UISettings::values.theme;
+    DarkModeState old_dark_mode_state = UISettings::values.dark_mode_state;
     const bool old_discord_presence = UISettings::values.enable_discord_presence.GetValue();
     const auto old_language_index = Settings::values.language_index.GetValue();
 #ifdef __unix__
@@ -3789,7 +3783,8 @@ void GMainWindow::OnConfigure() {
     }
     InitializeHotkeys();
 
-    if (UISettings::values.theme != old_theme) {
+    if (UISettings::values.theme != old_theme ||
+        UISettings::values.dark_mode_state != old_dark_mode_state) {
         UpdateUITheme();
     }
     if (UISettings::values.enable_discord_presence.GetValue() != old_discord_presence) {
@@ -3804,8 +3799,6 @@ void GMainWindow::OnConfigure() {
     if (!multiplayer_state->IsHostingPublicRoom()) {
         multiplayer_state->UpdateCredentials();
     }
-
-    emit UpdateThemedIcons();
 
     const auto reload = UISettings::values.is_game_list_reload_pending.exchange(false);
     if (reload || Settings::values.language_index.GetValue() != old_language_index) {
@@ -5047,9 +5040,105 @@ void GMainWindow::filterBarSetChecked(bool state) {
     emit(OnToggleFilterBar());
 }
 
+void GMainWindow::UpdateUITheme() {
+    const QString default_theme = QString::fromStdString(UISettings::default_theme.data());
+    QString current_theme = UISettings::values.theme;
+    if (current_theme.isEmpty()) {
+        current_theme = default_theme;
+    }
+
+    UpdateIcons(current_theme);
+
+    /* Find the stylesheet to load */
+    if (TryLoadStylesheet(current_theme)) {
+        return;
+    }
+
+    // Reading new theme failed, loading default stylesheet
+    LOG_ERROR(Frontend, "Unable to open style \"{}\", fallback to the default theme",
+              current_theme.toStdString());
+
+    if (TryLoadStylesheet(QStringLiteral(":/%1").arg(default_theme))) {
+        return;
+    }
+
+    // Reading default failed, loading empty stylesheet
+    LOG_ERROR(Frontend, "Unable to set default style, stylesheet file not found");
+
+    qApp->setStyleSheet({});
+    setStyleSheet({});
+}
+
+void GMainWindow::UpdateIcons(const QString& theme_path) {
+    // Get the theme directory from its path
+    std::size_t last_slash = theme_path.toStdString().find_last_of("/");
+    QString theme_dir = QString::fromStdString(theme_path.toStdString().substr(last_slash + 1));
+
+    // Append _dark to the theme name to use dark variant icons
+    if (CheckDarkMode()) {
+        LOG_DEBUG(Frontend, "Using icons from: {}", theme_dir.toStdString() + "_dark");
+        QIcon::setThemeName(theme_dir + QStringLiteral("_dark"));
+    } else {
+        LOG_DEBUG(Frontend, "Using icons from: {}", theme_dir.toStdString());
+        QIcon::setThemeName(theme_dir);
+    }
+
+    const QString theme_directory{
+        QString::fromStdString(Common::FS::GetSuyuPathString(Common::FS::SuyuPath::ThemesDir))};
+
+    // Set path for default icons
+    // Use icon resources from application binary and current theme local subdirectory, if it exists
+    QStringList theme_paths;
+    theme_paths << QString::fromStdString(":/icons") << QStringLiteral("%1").arg(theme_directory);
+    QIcon::setThemeSearchPaths(theme_paths);
+
+    // Change current directory, to allow user themes to add their own icons
+    QDir::setCurrent(QStringLiteral("%1/%2").arg(theme_directory, UISettings::values.theme));
+
+    emit UpdateThemedIcons();
+}
+
+bool GMainWindow::TryLoadStylesheet(const QString& theme_uri) {
+    LOG_DEBUG(Frontend, "TryLoadStylesheet()");
+    QString style_path;
+
+    // Use themed stylesheet if it exists
+    if (CheckDarkMode()) {
+        style_path = theme_uri + QStringLiteral("/dark.qss");
+    } else {
+        style_path = theme_uri + QStringLiteral("/light.qss");
+    }
+    if (!QFile::exists(style_path)) {
+        LOG_DEBUG(Frontend, "No themed (light/dark) stylesheet, using default one");
+        // Use common stylesheet if themed one does not exist
+        style_path = theme_uri + QStringLiteral("/style.qss");
+    }
+
+    // Loading stylesheet
+    QFile style_file(style_path);
+    if (style_file.open(QFile::ReadOnly | QFile::Text)) {
+        // Update the color palette before applying the stylesheet
+        UpdateThemePalette();
+
+        LOG_DEBUG(Frontend, "Loading stylesheet in: {}", theme_uri.toStdString());
+        QTextStream ts_theme(&style_file);
+        qApp->setStyleSheet(ts_theme.readAll());
+        setStyleSheet(ts_theme.readAll());
+        SetCustomStylesheet();
+
+        return true;
+    }
+    // Opening the file failed
+    return false;
+}
+
+bool GMainWindow::TryLoadStylesheet(const std::filesystem::path& theme_path) {
+    return TryLoadStylesheet(QString::fromStdString(theme_path.string() + "/"));
+}
+
 static void AdjustLinkColor() {
     QPalette new_pal(qApp->palette());
-    if (UISettings::IsDarkTheme()) {
+    if (GMainWindow::CheckDarkMode()) {
         new_pal.setColor(QPalette::Link, QColor(0, 190, 255, 255));
     } else {
         new_pal.setColor(QPalette::Link, QColor(0, 140, 200, 255));
@@ -5059,54 +5148,262 @@ static void AdjustLinkColor() {
     }
 }
 
-void GMainWindow::UpdateUITheme() {
-    const QString default_theme = QString::fromUtf8(
-        UISettings::themes[static_cast<size_t>(UISettings::default_theme)].second);
-    QString current_theme = QString::fromStdString(UISettings::values.theme);
-
-    if (current_theme.isEmpty()) {
-        current_theme = default_theme;
-    }
-
+void GMainWindow::UpdateThemePalette() {
+    LOG_DEBUG(Frontend, "UpdateThemePalette()");
+    QPalette themePalette(qApp->palette());
 #ifdef _WIN32
-    QIcon::setThemeName(current_theme);
-    AdjustLinkColor();
-#else
-    if (current_theme == QStringLiteral("default") || current_theme == QStringLiteral("colorful")) {
-        QIcon::setThemeName(current_theme == QStringLiteral("colorful") ? current_theme
-                                                                        : startup_icon_theme);
-        QIcon::setThemeSearchPaths(QStringList(default_theme_paths));
-        if (CheckDarkMode()) {
-            current_theme = QStringLiteral("default_dark");
+    QColor dark(25, 25, 25);
+    QString style_name;
+    if (CheckDarkMode()) {
+        // We check that the dark mode state is "On" and force a dark palette
+        if (UISettings::values.dark_mode_state == DarkModeState::On) {
+            // Set Default Windows Dark palette on Windows platforms to force Dark mode
+            themePalette.setColor(QPalette::Window, Qt::black);
+            themePalette.setColor(QPalette::WindowText, Qt::white);
+            themePalette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(127, 127, 127));
+            themePalette.setColor(QPalette::Base, Qt::black);
+            themePalette.setColor(QPalette::AlternateBase, dark);
+            themePalette.setColor(QPalette::ToolTipBase, Qt::white);
+            themePalette.setColor(QPalette::ToolTipText, Qt::black);
+            themePalette.setColor(QPalette::Text, Qt::white);
+            themePalette.setColor(QPalette::Disabled, QPalette::Text, QColor(127, 127, 127));
+            themePalette.setColor(QPalette::Dark, QColor(128, 128, 128));
+            themePalette.setColor(QPalette::Shadow, Qt::white);
+            themePalette.setColor(QPalette::Button, Qt::black);
+            themePalette.setColor(QPalette::ButtonText, Qt::white);
+            themePalette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(127, 127, 127));
+            themePalette.setColor(QPalette::BrightText, QColor(192, 192, 192));
+            themePalette.setColor(QPalette::Link, QColor(0, 140, 200));
+            themePalette.setColor(QPalette::Highlight, QColor(24, 70, 93));
+            themePalette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(0, 85, 255));
+            themePalette.setColor(QPalette::HighlightedText, QColor(239, 240, 241));
+            themePalette.setColor(QPalette::Disabled, QPalette::HighlightedText,
+                                  QColor(239, 240, 241));
         }
+
+        // AlternateBase is kept at rgb(233, 231, 227) or rgb(245, 245, 245) on Windows dark
+        // palette, fix this. Sometimes, it even is rgb(0, 0, 0), but uses a very light gray for
+        // alternate rows, do not know why
+        if (themePalette.alternateBase().color() == QColor(233, 231, 227) ||
+            themePalette.alternateBase().color() == QColor(245, 245, 245) ||
+            themePalette.alternateBase().color() == QColor(0, 0, 0)) {
+            themePalette.setColor(QPalette::AlternateBase, dark);
+            alternate_base_modified = true;
+        }
+        // Use fusion theme, since its close to windowsvista, but works well with a dark palette
+        style_name = QStringLiteral("fusion");
     } else {
-        QIcon::setThemeName(current_theme);
-        QIcon::setThemeSearchPaths(QStringList(QStringLiteral(":/icons")));
-        AdjustLinkColor();
+        // Reset AlternateBase if it has been modified
+        if (alternate_base_modified) {
+            themePalette.setColor(QPalette::AlternateBase, QColor(245, 245, 245));
+            alternate_base_modified = false;
+        }
+        // Reset light palette
+        themePalette = this->style()->standardPalette();
+        // Reset Windows theme to the default
+        style_name = QStringLiteral("windowsvista");
+    }
+    LOG_DEBUG(Frontend, "Using style: {}", style_name.toStdString());
+    qApp->setStyle(style_name);
+#elif defined(__APPLE__)
+    // Force the usage of the light palette in light mode
+    if (CheckDarkMode()) {
+        // Reset dark palette
+        themePalette = this->style()->standardPalette();
+    } else {
+        themePalette.setColor(QPalette::Window, QColor(236, 236, 236));
+        themePalette.setColor(QPalette::WindowText, Qt::black);
+        themePalette.setColor(QPalette::Disabled, QPalette::WindowText, Qt::black);
+        themePalette.setColor(QPalette::Base, Qt::white);
+        themePalette.setColor(QPalette::AlternateBase, QColor(245, 245, 245));
+        themePalette.setColor(QPalette::ToolTipBase, Qt::white);
+        themePalette.setColor(QPalette::ToolTipText, Qt::black);
+        themePalette.setColor(QPalette::Text, Qt::black);
+        themePalette.setColor(QPalette::Disabled, QPalette::Text, Qt::black);
+        themePalette.setColor(QPalette::Dark, QColor(191, 191, 191));
+        themePalette.setColor(QPalette::Shadow, Qt::black);
+        themePalette.setColor(QPalette::Button, QColor(236, 236, 236));
+        themePalette.setColor(QPalette::ButtonText, Qt::black);
+        themePalette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(147, 147, 147));
+        themePalette.setColor(QPalette::BrightText, Qt::white);
+        themePalette.setColor(QPalette::Link, QColor(0, 140, 200));
+        themePalette.setColor(QPalette::Highlight, QColor(179, 215, 255));
+        themePalette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(220, 220, 220));
+        themePalette.setColor(QPalette::HighlightedText, Qt::black);
+        themePalette.setColor(QPalette::Disabled, QPalette::HighlightedText, Qt::black);
+    }
+#else
+    if (CheckDarkMode()) {
+        // Set Dark palette on non Windows platforms (that may not have a dark palette)
+        themePalette.setColor(QPalette::Window, QColor(53, 53, 53));
+        themePalette.setColor(QPalette::WindowText, Qt::white);
+        themePalette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(127, 127, 127));
+        themePalette.setColor(QPalette::Base, QColor(42, 42, 42));
+        themePalette.setColor(QPalette::AlternateBase, QColor(66, 66, 66));
+        themePalette.setColor(QPalette::ToolTipBase, Qt::white);
+        themePalette.setColor(QPalette::ToolTipText, QColor(53, 53, 53));
+        themePalette.setColor(QPalette::Text, Qt::white);
+        themePalette.setColor(QPalette::Disabled, QPalette::Text, QColor(127, 127, 127));
+        themePalette.setColor(QPalette::Dark, QColor(35, 35, 35));
+        themePalette.setColor(QPalette::Shadow, QColor(20, 20, 20));
+        themePalette.setColor(QPalette::Button, QColor(53, 53, 53));
+        themePalette.setColor(QPalette::ButtonText, Qt::white);
+        themePalette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(127, 127, 127));
+        themePalette.setColor(QPalette::BrightText, Qt::red);
+        themePalette.setColor(QPalette::Link, QColor(42, 130, 218));
+        themePalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+        themePalette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(80, 80, 80));
+        themePalette.setColor(QPalette::HighlightedText, Qt::white);
+        themePalette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(127, 127, 127));
+    } else {
+        // Reset light palette
+        themePalette = this->style()->standardPalette();
     }
 #endif
-    if (current_theme != default_theme) {
-        QString theme_uri{QStringLiteral(":%1/style.qss").arg(current_theme)};
-        QFile f(theme_uri);
-        if (!f.open(QFile::ReadOnly | QFile::Text)) {
-            LOG_ERROR(Frontend, "Unable to open style \"{}\", fallback to the default theme",
-                      UISettings::values.theme);
-            current_theme = default_theme;
+    qApp->setPalette(themePalette);
+    AdjustLinkColor();
+}
+
+void GMainWindow::SetCustomStylesheet() {
+    setStyleSheet(QStringLiteral("QStatusBar::item { border: none; }"));
+
+    // Set "dark" qss property value, that may be used in stylesheets
+    bool is_dark_mode = CheckDarkMode();
+    if (renderer_status_button) {
+        renderer_status_button->setProperty("dark", is_dark_mode);
+    }
+    if (gpu_accuracy_button) {
+        gpu_accuracy_button->setProperty("dark", is_dark_mode);
+    }
+#ifdef _WIN32
+    // Windows dark mode uses "fusion" style. Make it look like more "windowsvista" light style
+    if (is_dark_mode) {
+        /* the groove expands to the size of the slider by default. by giving it a height, it has a
+        fixed size */
+        /* handle is placed by default on the contents rect of the groove. Negative margin expands
+        it outside the groove */
+        setStyleSheet(QStringLiteral("QSlider:horizontal{ height:30px; }\
+ QSlider::sub-page:horizontal { background-color: palette(highlight); }\
+ QSlider::add-page:horizontal { background-color: palette(midlight);}\
+ QSlider::groove:horizontal { border-width: 1px; margin: 1px 0; height: 2px;}\
+ QSlider::handle:horizontal { border-width: 1px; border-style: solid; border-color: palette(dark);\
+     width: 10px; margin: -10px 0px; }\
+ QSlider::handle { background-color: palette(button); }\
+ QSlider::handle:hover { background-color: palette(highlight); }"));
+    }
+#endif
+}
+
+#ifdef __unix__
+bool GMainWindow::ListenColorSchemeChange() {
+    auto bus = QDBusConnection::sessionBus();
+    if (bus.isConnected()) {
+        const QString dbus_service = QStringLiteral("org.freedesktop.portal.Desktop");
+        const QString dbus_path = QStringLiteral("/org/freedesktop/portal/desktop");
+        const QString dbus_interface = QStringLiteral("org.freedesktop.portal.Settings");
+        const QString dbus_method = QStringLiteral("SettingChanged");
+        QStringList dbus_arguments;
+        dbus_arguments << QStringLiteral("org.freedesktop.appearance")
+                       << QStringLiteral("color-scheme");
+        const QString dbus_signature = QStringLiteral("ssv");
+
+        LOG_INFO(Frontend, "Connected to DBus, listening for OS theme changes");
+        return bus.connect(dbus_service, dbus_path, dbus_interface, dbus_method, dbus_arguments,
+                           dbus_signature, this, SLOT(UpdateUITheme()));
+    }
+    LOG_WARNING(Frontend, "Unable to connect to DBus to listen for OS theme changes");
+    return false;
+}
+#endif
+
+bool GMainWindow::CheckDarkMode() {
+    bool is_dark_mode_auto;
+#ifdef _WIN32
+    // Dark mode cannot be changed after the app started on Windows
+    is_dark_mode_auto = qgetenv("QT_QPA_PLATFORM").contains("darkmode=2");
+#else
+    is_dark_mode_auto = UISettings::values.dark_mode_state == DarkModeState::Auto;
+#endif
+    if (!is_dark_mode_auto) {
+        return UISettings::values.dark_mode_state == DarkModeState::On;
+    } else {
+        const QPalette current_palette(qApp->palette());
+#ifdef __unix__
+        QProcess process;
+
+        // Using the freedesktop specifications for checking dark mode
+        LOG_DEBUG(Frontend, "Retrieving theme from freedesktop color-scheme...");
+        QStringList gdbus_arguments;
+        gdbus_arguments << QStringLiteral("--dest=org.freedesktop.portal.Desktop")
+                        << QStringLiteral("--object-path /org/freedesktop/portal/desktop")
+                        << QStringLiteral("--method org.freedesktop.portal.Settings.Read")
+                        << QStringLiteral("org.freedesktop.appearance color-scheme");
+        process.start(QStringLiteral("gdbus call --session"), gdbus_arguments);
+        process.waitForFinished(1000);
+        QByteArray dbus_output = process.readAllStandardOutput();
+
+        if (!dbus_output.isEmpty()) {
+            const int systemColorSchema = QString::fromUtf8(dbus_output).trimmed().right(1).toInt();
+            return systemColorSchema == 1;
+        }
+
+        // Try alternative for Gnome if the previous one failed
+        QStringList gsettings_arguments;
+        gsettings_arguments << QStringLiteral("get")
+                            << QStringLiteral("org.gnome.desktop.interface")
+                            << QStringLiteral("color-scheme");
+
+        LOG_DEBUG(Frontend, "failed, retrieving theme from gsettings color-scheme...");
+        process.start(QStringLiteral("gsettings"), gsettings_arguments);
+        process.waitForFinished(1000);
+        QByteArray gsettings_output = process.readAllStandardOutput();
+
+        // Try older gtk-theme method if the previous one failed
+        if (gsettings_output.isEmpty()) {
+            LOG_DEBUG(Frontend, "failed, retrieving theme from gtk-theme...");
+            gsettings_arguments.takeLast();
+            gsettings_arguments << QStringLiteral("gtk-theme");
+
+            process.start(QStringLiteral("gsettings"), gsettings_arguments);
+            process.waitForFinished(1000);
+            gsettings_output = process.readAllStandardOutput();
+        }
+
+        // Interpret gsettings value if it succeeded
+        if (!gsettings_output.isEmpty()) {
+            QString systeme_theme = QString::fromUtf8(gsettings_output);
+            LOG_DEBUG(Frontend, "Gsettings output: {}", systeme_theme.toStdString());
+            return systeme_theme.contains(QStringLiteral("dark"), Qt::CaseInsensitive);
+        }
+        LOG_DEBUG(Frontend, "failed, retrieving theme from palette");
+#endif
+        // Use default method based on palette swap by OS. It is the only method on Windows with
+        // Qt 5. Windows needs QT_QPA_PLATFORM env variable set to windows:darkmode=2 to force
+        // palette change
+        return (current_palette.color(QPalette::WindowText).lightness() >
+                current_palette.color(QPalette::Window).lightness());
+    }
+}
+
+void GMainWindow::changeEvent(QEvent* event) {
+    // PaletteChange event appears to only reach so far into the GUI, explicitly asking to
+    // UpdateUITheme is a decent work around
+    if (event->type() == QEvent::PaletteChange ||
+        event->type() == QEvent::ApplicationPaletteChange) {
+        LOG_DEBUG(Frontend,
+                  "Window color palette changed by event: {} (QEvent::PaletteChange is: {})",
+                  event->type(), QEvent::PaletteChange);
+        const QPalette test_palette(qApp->palette());
+        // Keeping eye on QPalette::Window to avoid looping. QPalette::Text might be useful too
+        const QColor window_color = test_palette.color(QPalette::Active, QPalette::Window);
+
+        if (last_window_color != window_color) {
+            last_window_color = window_color;
+
+            UpdateUITheme();
         }
     }
-
-    QString theme_uri{QStringLiteral(":%1/style.qss").arg(current_theme)};
-    QFile f(theme_uri);
-    if (f.open(QFile::ReadOnly | QFile::Text)) {
-        QTextStream ts(&f);
-        qApp->setStyleSheet(ts.readAll());
-        setStyleSheet(ts.readAll());
-    } else {
-        LOG_ERROR(Frontend, "Unable to set style \"{}\", stylesheet file not found",
-                  UISettings::values.theme);
-        qApp->setStyleSheet({});
-        setStyleSheet({});
-    }
+    QWidget::changeEvent(event);
 }
 
 void GMainWindow::LoadTranslation() {
@@ -5160,26 +5457,6 @@ void GMainWindow::SetGamemodeEnabled(bool state) {
     }
 }
 #endif
-
-void GMainWindow::changeEvent(QEvent* event) {
-#ifdef __unix__
-    // PaletteChange event appears to only reach so far into the GUI, explicitly asking to
-    // UpdateUITheme is a decent work around
-    if (event->type() == QEvent::PaletteChange) {
-        const QPalette test_palette(qApp->palette());
-        const QString current_theme = QString::fromStdString(UISettings::values.theme);
-        // Keeping eye on QPalette::Window to avoid looping. QPalette::Text might be useful too
-        static QColor last_window_color;
-        const QColor window_color = test_palette.color(QPalette::Active, QPalette::Window);
-        if (last_window_color != window_color && (current_theme == QStringLiteral("default") ||
-                                                  current_theme == QStringLiteral("colorful"))) {
-            UpdateUITheme();
-        }
-        last_window_color = window_color;
-    }
-#endif // __unix__
-    QWidget::changeEvent(event);
-}
 
 Service::AM::FrontendAppletParameters GMainWindow::ApplicationAppletParameters() {
     return Service::AM::FrontendAppletParameters{
@@ -5307,6 +5584,31 @@ int main(int argc, char* argv[]) {
     QCoreApplication::setApplicationName(QStringLiteral("suyu"));
 
 #ifdef _WIN32
+    QByteArray current_qt_qpa = qgetenv("QT_QPA_PLATFORM");
+    // Follow dark mode setting, if the "-platform" launch option is not set.
+    // Otherwise, just follow dark mode for the window decoration (title bar).
+    if (!current_qt_qpa.contains(":darkmode=")) {
+        if (UISettings::values.dark_mode_state == DarkModeState::Auto) {
+            // When setting is Auto, force adapting window decoration and stylesheet palette to use
+            // Windows theme. Default is darkmode:0, which always uses light palette
+            if (current_qt_qpa.isEmpty()) {
+                // Set the value
+                qputenv("QT_QPA_PLATFORM", QByteArray("windows:darkmode=2"));
+            } else {
+                // Concatenate to the existing value
+                qputenv("QT_QPA_PLATFORM", current_qt_qpa + ",darkmode=2");
+            }
+        } else {
+            // When setting is no Auto, adapt window decoration to the palette used
+            if (current_qt_qpa.isEmpty()) {
+                // Set the value
+                qputenv("QT_QPA_PLATFORM", QByteArray("windows:darkmode=1"));
+            } else {
+                // Concatenate to the existing value
+                qputenv("QT_QPA_PLATFORM", current_qt_qpa + ",darkmode=1");
+            }
+        }
+    }
     // Increases the maximum open file limit to 8192
     _setmaxstdio(8192);
 #endif

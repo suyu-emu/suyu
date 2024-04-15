@@ -1,14 +1,4 @@
 [Icon Theme]
 Name=qdarkstyle_midnight_blue
-Comment=dark theme
-Inherits=colorful
-Directories=16x16,48x48,256x256
-
-[16x16]
-Size=16
-
-[48x48]
-Size=48
-
-[256x256]
-Size=256
+Comment=Dark theme (Midnight Blue style)
+Inherits=default_dark

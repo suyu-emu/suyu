@@ -17,6 +17,7 @@ enum class SuyuPath {
     ConfigDir,      // Where config files are stored.
     CrashDumpsDir,  // Where crash dumps are stored.
     DumpDir,        // Where dumped data is stored.
+    IconsDir,       // Where Icons for Windows shortcuts are stored.
     KeysDir,        // Where key files are stored.
     LoadDir,        // Where cheat/mod files are stored.
     LogDir,         // Where log files are stored.
@@ -26,7 +27,7 @@ enum class SuyuPath {
     SDMCDir,        // Where the emulated SDMC is stored.
     ShaderDir,      // Where shaders are stored.
     TASDir,         // Where TAS scripts are stored.
-    IconsDir,       // Where Icons for Windows shortcuts are stored.
+    ThemesDir,      // Where users should put their custom themes
 };
 
 /**

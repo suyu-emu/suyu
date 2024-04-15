@@ -6,64 +6,66 @@ SPDX-License-Identifier: GPL-2.0-or-later
 <RCC>
   <qresource prefix="overlay">
     <file>arrow_left.png</file>
-    <file>arrow_left_dark.png</file>
     <file>arrow_right.png</file>
-    <file>arrow_right_dark.png</file>
     <file>button_minus.png</file>
-    <file>button_minus_dark.png</file>
     <file>button_plus.png</file>
-    <file>button_plus_dark.png</file>
     <file>button_A.png</file>
-    <file>button_A_dark.png</file>
     <file>button_B.png</file>
-    <file>button_B_dark.png</file>
     <file>button_X.png</file>
-    <file>button_X_dark.png</file>
     <file>button_Y.png</file>
-    <file>button_Y_dark.png</file>
     <file>button_L.png</file>
-    <file>button_L_dark.png</file>
     <file>button_R.png</file>
-    <file>button_R_dark.png</file>
     <file>button_press_stick.png</file>
-    <file>button_press_stick_dark.png</file>
     <file>osk_button_B.png</file>
     <file>osk_button_B_disabled.png</file>
-    <file>osk_button_B_dark.png</file>
-    <file>osk_button_B_dark_disabled.png</file>
     <file>osk_button_Y.png</file>
     <file>osk_button_Y_disabled.png</file>
-    <file>osk_button_Y_dark.png</file>
-    <file>osk_button_Y_dark_disabled.png</file>
     <file>osk_button_backspace.png</file>
-    <file>osk_button_backspace_dark.png</file>
     <file>osk_button_plus.png</file>
     <file>osk_button_plus_disabled.png</file>
-    <file>osk_button_plus_dark.png</file>
-    <file>osk_button_plus_dark_disabled.png</file>
     <file>osk_button_shift.png</file>
-    <file>osk_button_shift_dark.png</file>
     <file>osk_button_shift_on.png</file>
-    <file>osk_button_shift_on_dark.png</file>
     <file>osk_button_shift_lock_on.png</file>
     <file>osk_button_shift_lock_off.png</file>
     <file>controller_dual_joycon.png</file>
-    <file>controller_dual_joycon_dark.png</file>
     <file>controller_pro.png</file>
-    <file>controller_pro_dark.png</file>
     <file>controller_handheld.png</file>
-    <file>controller_handheld_dark.png</file>
     <file>controller_single_joycon_left.png</file>
-    <file>controller_single_joycon_left_dark.png</file>
     <file>controller_single_joycon_right.png</file>
-    <file>controller_single_joycon_right_dark.png</file>
     <file>controller_single_joycon_left_a.png</file>
-    <file>controller_single_joycon_left_a_dark.png</file>
     <file>controller_single_joycon_left_b.png</file>
-    <file>controller_single_joycon_left_b_dark.png</file>
     <file>controller_single_joycon_left_x.png</file>
-    <file>controller_single_joycon_left_x_dark.png</file>
     <file>controller_single_joycon_left_y.png</file>
-    <file>controller_single_joycon_left_y_dark.png</file>
+  </qresource>
+  <qresource prefix="overlay_dark">
+    <file alias="arrow_left.png">../overlay_dark/arrow_left.png</file>
+    <file alias="arrow_right.png">../overlay_dark/arrow_right.png</file>
+    <file alias="button_minus.png">../overlay_dark/button_minus.png</file>
+    <file alias="button_plus.png">../overlay_dark/button_plus.png</file>
+    <file alias="button_A.png">../overlay_dark/button_A.png</file>
+    <file alias="button_B.png">../overlay_dark/button_B.png</file>
+    <file alias="button_X.png">../overlay_dark/button_X.png</file>
+    <file alias="button_Y.png">../overlay_dark/button_Y.png</file>
+    <file alias="button_L.png">../overlay_dark/button_L.png</file>
+    <file alias="button_R.png">../overlay_dark/button_R.png</file>
+    <file alias="button_press_stick.png">../overlay_dark/button_press_stick.png</file>
+    <file alias="osk_button_B.png">../overlay_dark/osk_button_B.png</file>
+    <file alias="osk_button_B_disabled.png">../overlay_dark/osk_button_B.png</file>
+    <file alias="osk_button_Y.png">../overlay_dark/osk_button_Y.png</file>
+    <file alias="osk_button_Y_disabled.png">../overlay_dark/osk_button_Y.png</file>
+    <file alias="osk_button_backspace.png">../overlay_dark/osk_button_backspace.png</file>
+    <file alias="osk_button_plus.png">../overlay_dark/osk_button_plus.png</file>
+    <file alias="osk_button_plus_disabled.png">../overlay_dark/osk_button_plus.png</file>
+    <file alias="osk_button_shift.png">../overlay_dark/osk_button_shift.png</file>
+    <file alias="osk_button_shift_on.png">../overlay_dark/osk_button_shift_on.png</file>
+    <file alias="controller_dual_joycon.png">../overlay_dark/controller_dual_joycon.png</file>
+    <file alias="controller_pro.png">../overlay_dark/controller_pro.png</file>
+    <file alias="controller_handheld.png">../overlay_dark/controller_handheld.png</file>
+    <file alias="controller_single_joycon_left.png">../overlay_dark/controller_single_joycon_left.png</file>
+    <file alias="controller_single_joycon_right.png">../overlay_dark/controller_single_joycon_right.png</file>
+    <file alias="controller_single_joycon_left_a.png">../overlay_dark/controller_single_joycon_left_a.png</file>
+    <file alias="controller_single_joycon_left_b.png">../overlay_dark/controller_single_joycon_left_b.png</file>
+    <file alias="controller_single_joycon_left_x.png">../overlay_dark/controller_single_joycon_left_x.png</file>
+    <file alias="controller_single_joycon_left_y.png">../overlay_dark/controller_single_joycon_left_y.png</file>
   </qresource>
 </RCC>

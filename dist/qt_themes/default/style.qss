@@ -1,3 +1,14 @@
+/*
+* SPDX-FileCopyrightText: 2018 yuzu Emulator Project
+* SPDX-FileCopyrightText: 2024 suyu Emulator Project
+* SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+QWidget:item:hover {
+    background-color: #28668d;
+    color: #eff0f1;
+}
+
 QAbstractSpinBox {
     min-height: 19px;
 }
@@ -11,7 +22,7 @@ QPushButton#TogglableStatusBarButton {
 }
 
 QPushButton#TogglableStatusBarButton:checked {
-    color: #000000;
+    color: palette(text);
 }
 
 QPushButton#TogglableStatusBarButton:hover {
@@ -38,6 +49,10 @@ QPushButton#RendererStatusBarButton:!checked {
     color: #0066ff;
 }
 
+QPushButton#RendererStatusBarButton:!checked[dark=true] {
+    color: #00ccdd;
+}
+
 QPushButton#GPUStatusBarButton {
     color: #656565;
     border: 1px solid transparent;
@@ -54,13 +69,21 @@ QPushButton#GPUStatusBarButton:checked {
     color: #b06020;
 }
 
+QPushButton#GPUStatusBarButton:checked[dark=true] {
+    color: #ff8040;
+}
+
 QPushButton#GPUStatusBarButton:!checked {
     color: #109010;
 }
 
+QPushButton#GPUStatusBarButton:!checked[dark=true] {
+    color: #40dd40;
+}
+
 QPushButton#DockingStatusBarButton {
     min-width: 0px;
-    color: #000000;
+    color: palette(text);
     border: 1px solid transparent;
     background-color: transparent;
     padding: 0px 3px 0px 3px;
@@ -94,21 +117,21 @@ QGroupBox#groupPlayer5Connected:checked,
 QGroupBox#groupPlayer6Connected:checked,
 QGroupBox#groupPlayer7Connected:checked,
 QGroupBox#groupPlayer8Connected:checked {
-    background-color: #f5f5f5;
+    background-color: palette(window);
 }
 
 QWidget#topControllerApplet {
-    border-bottom: 1px solid #828790
+    border-bottom: 1px solid palette(dark)
 }
 
 QWidget#bottomPerGameInput,
 QWidget#bottomControllerApplet {
-    border-top: 1px solid #828790
+    border-top: 1px solid palette(dark)
 }
 
 QWidget#topPerGameInput,
 QWidget#middleControllerApplet {
-    background-color: #fff;
+    background-color: palette(base)
 }
 
 QWidget#topPerGameInput QComboBox,
@@ -117,10 +140,6 @@ QWidget#middleControllerApplet QComboBox {
 }
 
 QWidget#connectedControllers {
-    background: transparent;
-}
-
-QWidget#closeButtons {
     background: transparent;
 }
 
@@ -345,7 +364,7 @@ QWidget#lineDialog {
 QStackedWidget#bottomOSK,
 QWidget#contentDialog,
 QWidget#contentRichDialog {
-    background: rgba(240, 240, 240, 1);
+    background: palette(base);
 }
 
 QWidget#contentDialog,
@@ -372,7 +391,7 @@ QStackedWidget#stackedDialog QTextBrowser QScrollBar::vertical {
     border-radius: 4px;
 }
 
-QStackedWidget#stackedDialog QTextBrowser QScrollBar::horizoncal {
+QStackedWidget#stackedDialog QTextBrowser QScrollBar::horizontal {
     background: #cdcdcd;
     height: 15px;
     margin: 3px 15px 3px 15px;
@@ -402,6 +421,7 @@ QWidget#inputOSK QLineEdit {
     background: transparent;
     border: none;
     color: #ccc;
+    padding: 0px;
 }
 
 QWidget#inputBoxOSK {
@@ -429,6 +449,27 @@ QWidget#lineOSK QLabel#label_sub,
 QWidget#lineOSK QLabel#label_characters,
 QWidget#boxOSK QLabel#label_characters_box {
     color: #ccc;
+}
+
+QWidget#buttonsDialog,
+QWidget#buttonsRichDialog,
+QWidget#mainOSK,
+QWidget#headerOSK,
+QWidget#normalOSK,
+QWidget#shiftOSK,
+QWidget#numOSK,
+QWidget#subOSK,
+QWidget#inputOSK,
+QWidget#inputBoxOSK,
+QWidget#charactersOSK,
+QWidget#charactersBoxOSK,
+QWidget#legendOSK,
+QWidget#legendOSK QWidget,
+QWidget#legendOSKshift,
+QWidget#legendOSKshift QWidget,
+QWidget#legendOSKnum,
+QWidget#legendOSKnum QWidget {
+    background: transparent;
 }
 
 QWidget#contentDialog QLabel#label_title,
@@ -471,8 +512,8 @@ QDialog#OverlayDialog QPushButton:pressed {
 }
 
 QDialog#QtSoftwareKeyboardDialog QPushButton {
-    background: rgba(232, 232, 232, 1);
-    border: 2px solid rgba(240, 240, 240, 1);
+    background: palette(window);
+    border: 2px solid palette(base);
 }
 
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_shift,
@@ -481,27 +522,35 @@ QDialog#QtSoftwareKeyboardDialog QPushButton#button_space,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_shift_shift,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_return_shift,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_space_shift {
-    background: rgba(218, 218, 218, 1);
-    border: 2px solid rgba(240, 240, 240, 1);
+    background: palette(alternate-base);
+    border: 2px solid palette(base);
 }
 
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_shift,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num {
-    color: rgba(240, 240, 240, 1);
-    background: rgba(44, 44, 44, 1);
-    border: 2px solid rgba(240, 240, 240, 1);
+    color: palette(base);
+    background: palette(mid);
+    border: 2px solid palette(base);
 }
 
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_shift,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_num {
-    color: rgba(240, 240, 240, 1);
-    background: rgba(49, 79, 239, 1);
-    border: 2px solid rgba(240, 240, 240, 1);
+    color: palette(base);
+    background: palette(highlight);
+    border: 2px solid palette(base);
 }
 
 QDialog#QtSoftwareKeyboardDialog QPushButton:focus,
+QDialog#QtSoftwareKeyboardDialog QPushButton:hover
+{
+    background: palette(base);
+    border: 5px solid rgba(148, 250, 202, 1);
+    border-radius: 6px;
+    outline: none;
+}
+
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok:focus,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_shift:focus,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_space:focus,
@@ -514,8 +563,6 @@ QDialog#QtSoftwareKeyboardDialog QPushButton#button_return_shift:focus,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_shift:focus,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_num:focus,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num:focus,
-
-QDialog#QtSoftwareKeyboardDialog QPushButton:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_shift:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_space:hover,
@@ -524,12 +571,11 @@ QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_shift:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_shift_shift:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_space_shift:hover,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_return_shift:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_shift:hover,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_num:hover,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num:hover {
-    color: rgba(0, 0, 0, 1);
-    background: rgba(255, 255, 255, 1);
+QDialog#QtSoftwareKeyboardDialog QPushButton#button_return_shift:hover,
+QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num:hover
+{
     border: 5px solid rgba(148, 250, 202, 1);
     border-radius: 6px;
     outline: none;
@@ -548,46 +594,10 @@ QDialog#QtSoftwareKeyboardDialog QPushButton#button_return_shift:pressed,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_shift:pressed,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_num:pressed,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num:pressed {
-    color: rgba(240, 240, 240, 1);
+    color: palette(base);
     background: rgba(150, 150, 150, 1);
     border: 5px solid rgba(148, 250, 202, 1);
     border-radius: 6px;
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_shift,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num {
-    image: url(:/overlay/osk_button_B.png);
-    image-position: right;
-    qproperty-icon: url(:/overlay/osk_button_backspace.png);
-    qproperty-iconSize: 36px;
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_space,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_space_shift {
-    image: url(:/overlay/osk_button_Y.png);
-    image-position: right;
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_shift,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_num {
-    image: url(:/overlay/osk_button_plus.png);
-    image-position: right;
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_shift {
-    image: url(:/overlay/osk_button_shift_lock_off.png);
-    image-position: left;
-    qproperty-icon: url(:/overlay/osk_button_shift.png);
-    qproperty-iconSize: 36px;
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_shift_shift {
-    image: url(:/overlay/osk_button_shift_lock_off.png);
-    image-position: left;
-    qproperty-icon: url(:/overlay/osk_button_shift_on.png);
-    qproperty-iconSize: 36px;
 }
 
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_left_bracket,
@@ -602,47 +612,6 @@ QDialog#QtSoftwareKeyboardDialog QWidget#titleOSK QLabel {
     color: #ccc;
 }
 
-QDialog#QtSoftwareKeyboardDialog QWidget#button_L,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_L_shift,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_L_num {
-    image: url(:/overlay/button_L.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QWidget#arrow_left,
-QDialog#QtSoftwareKeyboardDialog QWidget#arrow_left_shift,
-QDialog#QtSoftwareKeyboardDialog QWidget#arrow_left_num {
-    image: url(:/overlay/arrow_left.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QWidget#button_R,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_R_shift,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_R_num {
-    image: url(:/overlay/button_R.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QWidget#arrow_right,
-QDialog#QtSoftwareKeyboardDialog QWidget#arrow_right_shift,
-QDialog#QtSoftwareKeyboardDialog QWidget#arrow_right_num {
-    image: url(:/overlay/arrow_right.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QWidget#button_press_stick,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_press_stick_shift {
-    image: url(:/overlay/button_press_stick.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QWidget#button_X,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_X_shift,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_X_num {
-    image: url(:/overlay/button_X.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QWidget#button_A,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_A_shift,
-QDialog#QtSoftwareKeyboardDialog QWidget#button_A_num {
-    image: url(:/overlay/button_A.png);
-}
-
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_space:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_return:disabled,
@@ -653,8 +622,8 @@ QDialog#QtSoftwareKeyboardDialog QPushButton#button_return_shift:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_shift:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_num:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num:disabled {
-    color: rgba(164, 164, 164, 1);
-    background-color: rgba(218, 218, 218, 1);
+    color: palette(midlight);
+    background-color: palette(alternate-base);
 }
 
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_at:disabled,
@@ -671,22 +640,5 @@ QDialog#QtSoftwareKeyboardDialog QPushButton#button_8:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_9:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_0:disabled,
 QDialog#QtSoftwareKeyboardDialog QPushButton#button_return:disabled {
-    color: rgba(164, 164, 164, 1);
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok:disabled,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_shift:disabled,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_ok_num:disabled {
-    image: url(:/overlay/osk_button_plus_disabled.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace:disabled,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_shift:disabled,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_backspace_num:disabled {
-    image: url(:/overlay/osk_button_B_disabled.png);
-}
-
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_space:disabled,
-QDialog#QtSoftwareKeyboardDialog QPushButton#button_space_shift:disabled {
-    image: url(:/overlay/osk_button_Y_disabled.png);
+    color: palette(midlight);
 }

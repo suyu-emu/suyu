@@ -5,10 +5,13 @@ Comment: It is best to use this file to record copyright information about
 Files: dist/english_plurals/*
        dist/icons/controller/*.png
        dist/icons/overlay/*.png
+       dist/icons/overlay_dark/*.png
        dist/languages/*
        dist/qt_themes/*/icons/48x48/sd_card.png
        dist/qt_themes/*/icons/index.theme
        dist/qt_themes/default/style.qss
+       dist/qt_themes/*/icons.qrc
+       dist/qt_themes/*/style.qrc
 Copyright: yuzu Emulator Project
            suyu Emulator Project
 License: GPL-2.0-or-later
@@ -22,8 +25,7 @@ Copyright: suyu Emulator Project
 License: GPL-2.0-or-later
 
 Files: dist/qt_themes/qdarkstyle*/LICENSE.*
-       dist/qt_themes/qdarkstyle*/style.qrc
-       dist/qt_themes/qdarkstyle*/style.qss
+       dist/qt_themes/qdarkstyle*/dark.qss
 Copyright: 2013 Colin Duquesnoy
            2019 Daniel Cosmo Pizetta
 License: MIT
@@ -33,28 +35,28 @@ Copyright: 2013 Colin Duquesnoy
            2019 Daniel Cosmo Pizetta
 License: CC-BY-4.0
 
-Files: dist/qt_themes/default/icons/256x256/plus_folder.png
-       dist/qt_themes/default/icons/48x48/bad_folder.png
-       dist/qt_themes/default/icons/48x48/chip.png
-       dist/qt_themes/default/icons/48x48/folder.png
-       dist/qt_themes/default/icons/48x48/star.png
-       dist/qt_themes/qdarkstyle/icons/256x256/plus_folder.png
-       dist/qt_themes/qdarkstyle/icons/48x48/bad_folder.png
-       dist/qt_themes/qdarkstyle/icons/48x48/chip.png
-       dist/qt_themes/qdarkstyle/icons/48x48/folder.png
-       dist/qt_themes/qdarkstyle/icons/48x48/star.png
+Files: dist/qt_themes/monochrome/icons/256x256/plus_folder.png
+       dist/qt_themes/monochrome/icons/48x48/bad_folder.png
+       dist/qt_themes/monochrome/icons/48x48/chip.png
+       dist/qt_themes/monochrome/icons/48x48/folder.png
+       dist/qt_themes/monochrome/icons/48x48/star.png
+       dist/qt_themes/monochrome_dark/icons/48x48/bad_folder.png
+       dist/qt_themes/monochrome_dark/icons/48x48/chip.png
+       dist/qt_themes/monochrome_dark/icons/48x48/folder.png
+       dist/qt_themes/monochrome_dark/icons/48x48/star.png
+       dist/qt_themes/monochrome_dark/icons/256x256/plus_folder.png
 Copyright: Refactoring UI Inc.
 License: MIT
 Comment: https://github.com/tailwindlabs/heroicons
 
-Files: dist/qt_themes/colorful/icons/16x16/lock.png
-       dist/qt_themes/colorful/icons/256x256/plus_folder.png
-       dist/qt_themes/colorful/icons/48x48/bad_folder.png
-       dist/qt_themes/colorful/icons/48x48/chip.png
-       dist/qt_themes/colorful/icons/48x48/folder.png
-       dist/qt_themes/colorful_dark/icons/16x16/lock.png
-       dist/qt_themes/colorful/icons/16x16/info.png
-       dist/qt_themes/colorful/icons/16x16/sync.png
+Files: dist/qt_themes/default/icons/16x16/lock.png
+       dist/qt_themes/default/icons/256x256/plus_folder.png
+       dist/qt_themes/default/icons/48x48/bad_folder.png
+       dist/qt_themes/default/icons/48x48/chip.png
+       dist/qt_themes/default/icons/48x48/folder.png
+       dist/qt_themes/default_dark/icons/16x16/lock.png
+       dist/qt_themes/default/icons/16x16/info.png
+       dist/qt_themes/default/icons/16x16/sync.png
 Copyright: Icons8
 License: MIT
 Comment: https://github.com/icons8/flat-color-icons
@@ -70,15 +72,15 @@ Files: dist/qt_themes/*/icons/48x48/no_avatar.png
 Copyright: Ionic (http://ionic.io/)
 License: MIT
 
-Files: dist/qt_themes/colorful/icons/48x48/star.png
-       dist/qt_themes/colorful/icons/16x16/checked.png
-       dist/qt_themes/colorful/icons/16x16/failed.png
+Files: dist/qt_themes/default/icons/48x48/star.png
+       dist/qt_themes/default/icons/16x16/checked.png
+       dist/qt_themes/default/icons/16x16/failed.png
 Copyright: SVG Repo
 License: CC0-1.0
 
 Files: dist/qt_themes/*/icons/16x16/view-refresh.png
-       dist/qt_themes/default/icons/16x16/lock.png
-       dist/qt_themes/qdarkstyle/icons/16x16/lock.png
+       dist/qt_themes/monochrome/icons/16x16/lock.png
+       dist/qt_themes/monochrome_dark/icons/16x16/lock.png
 Copyright: Google, Inc.
 License: Apache-2.0
 

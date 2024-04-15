@@ -384,10 +384,12 @@ bool QtControllerSelectorDialog::CheckIfParametersMet() {
 
 void QtControllerSelectorDialog::SetSupportedControllers() {
     const QString theme = [] {
-        if (QIcon::themeName().contains(QStringLiteral("dark"))) {
-            return QStringLiteral("_dark");
-        } else if (QIcon::themeName().contains(QStringLiteral("midnight"))) {
+        if (QIcon::themeName().contains(QStringLiteral("midnight"))) {
             return QStringLiteral("_midnight");
+        } else if (GMainWindow::CheckDarkMode() ||
+                   QIcon::themeName().contains(QStringLiteral("dark"))) {
+            // Use dark icons if current OS mode is dark, or the theme contains "dark" in its name
+            return QStringLiteral("_dark");
         } else {
             return QString{};
         }
@@ -572,10 +574,12 @@ void QtControllerSelectorDialog::UpdateControllerIcon(std::size_t player_index) 
     }
 
     const QString theme = [] {
-        if (QIcon::themeName().contains(QStringLiteral("dark"))) {
-            return QStringLiteral("_dark");
-        } else if (QIcon::themeName().contains(QStringLiteral("midnight"))) {
+        if (QIcon::themeName().contains(QStringLiteral("midnight"))) {
             return QStringLiteral("_midnight");
+        } else if (GMainWindow::CheckDarkMode() ||
+                   QIcon::themeName().contains(QStringLiteral("dark"))) {
+            // Use dark icons if current OS mode is dark, or the theme contains "dark" in its name
+            return QStringLiteral("_dark");
         } else {
             return QString{};
         }

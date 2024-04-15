@@ -18,6 +18,7 @@
 
 using Settings::Category;
 using Settings::ConfirmStop;
+using Settings::DarkModeState;
 using Settings::Setting;
 using Settings::SwitchableSetting;
 
@@ -35,8 +36,6 @@ extern template class Setting<unsigned long long>;
 
 namespace UISettings {
 
-bool IsDarkTheme();
-
 struct ContextualShortcut {
     std::string keyseq;
     std::string controller_keyseq;
@@ -50,25 +49,10 @@ struct Shortcut {
     ContextualShortcut shortcut;
 };
 
-enum class Theme {
-    Default,
-    DefaultColorful,
-    Dark,
-    DarkColorful,
-    MidnightBlue,
-    MidnightBlueColorful,
-};
-
-static constexpr Theme default_theme{
-#ifdef _WIN32
-    Theme::DarkColorful
-#else
-    Theme::DefaultColorful
-#endif
-};
+static constexpr std::string_view default_theme{":/default"};
 
 using Themes = std::array<std::pair<const char*, const char*>, 6>;
-extern const Themes themes;
+extern const Themes included_themes;
 
 struct GameDir {
     std::string path;
@@ -160,7 +144,8 @@ struct Values {
     QStringList recent_files;
     Setting<std::string> language{linkage, {}, "language", Category::Paths};
 
-    std::string theme;
+    QString theme;
+    DarkModeState dark_mode_state;
 
     // Shortcut name <Shortcut, context>
     std::vector<Shortcut> shortcuts;
@@ -278,3 +263,4 @@ Q_DECLARE_METATYPE(Settings::RendererBackend);
 Q_DECLARE_METATYPE(Settings::ShaderBackend);
 Q_DECLARE_METATYPE(Settings::AstcRecompression);
 Q_DECLARE_METATYPE(Settings::AstcDecodeMode);
+Q_DECLARE_METATYPE(Settings::DarkModeState);

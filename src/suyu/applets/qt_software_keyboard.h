@@ -81,6 +81,12 @@ private:
     };
 
     /**
+     * Get the current theme suffix
+     * @return an empty string for light theme, "_dark" for dark theme
+     */
+    QString theme();
+
+    /**
      * Moves and resizes the window to a specified position and size.
      *
      * @param pos Top-left window position
@@ -108,6 +114,9 @@ private:
 
     /// Sets the controller image at the bottom left of the software keyboard.
     void SetControllerImage();
+
+    /// Sets the controller image at the bottom left of the software keyboard.
+    void SetButtonImages();
 
     /// Disables buttons based on initialize_parameters.
     void DisableKeyboardButtons();

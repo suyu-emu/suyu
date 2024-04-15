@@ -1430,12 +1430,12 @@
                 </item>
                 <item>
                  <widget class="QGroupBox" name="buttonShoulderButtonsButtonZLGroup">
-                   <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                     </sizepolicy>
-                   </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="title">
                    <string>ZL</string>
                   </property>
@@ -1481,20 +1481,20 @@
                     </widget>
                    </item>
                     <item>
-                      <widget class="QSlider" name="sliderZLThreshold">
-                        <property name="maximumSize">
-                          <size>
-                            <width>70</width>
-                            <height>15</height>
-                          </size>
-                        </property>
-                        <property name="maximum">
-                          <number>100</number>
-                        </property>
-                        <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                        </property>
-                      </widget>
+                     <widget class="QSlider" name="sliderZLThreshold">
+                      <property name="maximumSize">
+                       <size>
+                        <width>70</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="maximum">
+                       <number>100</number>
+                      </property>
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                     </widget>
                     </item>
                   </layout>
                  </widget>
@@ -1927,22 +1927,22 @@
                      </property>
                     </widget>
                    </item>
-                    <item>
-                      <widget class="QSlider" name="sliderZRThreshold">
-                        <property name="maximumSize">
-                          <size>
-                            <width>70</width>
-                            <height>15</height>
-                          </size>
-                        </property>
-                        <property name="maximum">
-                          <number>100</number>
-                        </property>
-                        <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                        </property>
-                      </widget>
-                    </item>
+                   <item>
+                    <widget class="QSlider" name="sliderZRThreshold">
+                     <property name="maximumSize">
+                      <size>
+                       <width>70</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="maximum">
+                      <number>100</number>
+                     </property>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </widget>
                 </item>

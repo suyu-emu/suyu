@@ -5,6 +5,7 @@
 
 #ifdef _WIN32
 #include <cstring>
+#include <QByteArray>
 #include <processthreadsapi.h>
 #include <windows.h>
 #elif defined(SUYU_UNIX)
