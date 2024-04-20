@@ -163,7 +163,7 @@
     <string name="about_app_description">Egy nyílt forráskódú Switch emulátor</string>
     <string name="contributors">Hozzájárulók</string>
     <string name="contributors_description">\u2764 által készítve a suyu csapattól</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="licenses_description">Projektek, amik nélkül a suyu nem jöhetett volna létre Androidra</string>
     <string name="user_data">Felhasználói adatok</string>
     <string name="user_data_description">Az összes alkalmazásadat importálása/exportálása.\n\nA felhasználói adatok importálásakor az összes meglévő felhasználói adat törlődik!</string>
@@ -175,9 +175,9 @@
     <string name="user_data_import_success">Felhasználói adatok sikeresen importálva</string>
     <string name="user_data_export_cancelled">Exportálás megszakítva</string>
     <string name="user_data_import_failed_description">Ellenőrizd, hogy a felhasználói adatok mappái a zip mappa gyökerében vannak, és tartalmaznak egy konfig fájlt a config/config.ini címen, majd próbáld meg újra.</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <!-- Early access upgrade strings -->
     <string name="early_access">Korai hozzáférés</string>

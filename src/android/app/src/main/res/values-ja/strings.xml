@@ -122,7 +122,7 @@
     <string name="about_app_description">オープンソースのSwitchエミュレータ</string>
     <string name="contributors">貢献者</string>
     <string name="contributors_description">suyuチームの\u2764で作られた</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="licenses_description">suyu for Androidの作成を可能にしたプロジェクト</string>
     <string name="build">ビルド</string>
     <string name="user_data">ユーザデータ</string>
@@ -132,9 +132,9 @@
     <string name="user_data_export_success">ユーザデータのエクスポートに成功しました</string>
     <string name="user_data_import_success">ユーザデータのインポートに成功しました</string>
     <string name="user_data_export_cancelled">エクスポートをキャンセルしました</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <!-- Early access upgrade strings -->
     <string name="early_access">早期アクセス</string>

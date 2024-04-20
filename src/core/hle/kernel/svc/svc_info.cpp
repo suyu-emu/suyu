@@ -37,7 +37,8 @@ Result GetInfo(Core::System& system, u64* result, InfoType info_id_type, Handle 
     case InfoType::TotalNonSystemMemorySize:
     case InfoType::UsedNonSystemMemorySize:
     case InfoType::IsApplication:
-    case InfoType::FreeThreadCount: {
+    case InfoType::FreeThreadCount:
+    case InfoType::ReservedRegionExtraSize: {
         R_UNLESS(info_sub_id == 0, ResultInvalidEnumValue);
 
         const auto& handle_table = GetCurrentProcess(system.Kernel()).GetHandleTable();
@@ -132,6 +133,10 @@ Result GetInfo(Core::System& system, u64* result, InfoType info_id_type, Handle 
             } else {
                 *result = 0;
             }
+            R_SUCCEED();
+
+        case InfoType::ReservedRegionExtraSize:
+            *result = process->GetPageTable().GetReservedRegionExtraSize();
             R_SUCCEED();
 
         default:

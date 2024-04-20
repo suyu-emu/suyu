@@ -38,7 +38,7 @@ env:
 jobs:
   format:
     name: 'Verify Format'
-    runs-on: ubuntu-latest
+    runs-on: docker
     container: fijxu/build-environments:linux-clang-format
     steps:
       - uses: https://code.forgejo.org/actions/checkout@v3
@@ -54,7 +54,7 @@ jobs:
   build-linux:
     name: 'test build'
     needs: format
-    runs-on: ubuntu-latest
+    runs-on: docker
     strategy:
       fail-fast: false
       matrix:
@@ -175,7 +175,7 @@ jobs:
   #         name: ${{ env.INDIVIDUAL_EXE }}
   #         path: ${{ env.INDIVIDUAL_EXE }}
   android:
-    runs-on: ubuntu-latest
+    runs-on: docker
     container: fijxu/build-environments:android
     needs: format
     steps:

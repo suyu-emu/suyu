@@ -163,7 +163,7 @@
     <string name="about_app_description">一款开放源代码的 Switch 模拟器</string>
     <string name="contributors">贡献者</string>
     <string name="contributors_description">suyu 团队的用 \u2764 制作</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="licenses_description">Android 版 suyu 离不开这些项目的支持</string>
     <string name="build">构建版本</string>
     <string name="user_data">用户数据</string>
@@ -176,9 +176,9 @@
     <string name="user_data_import_success">导入用户数据成功</string>
     <string name="user_data_export_cancelled">已取消导出数据</string>
     <string name="user_data_import_failed_description">请确保用户数据文件夹位于 zip 压缩包的根目录，并在 config/config.ini 路径中包含配置文件，然后重试。</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <!-- Early access upgrade strings -->
     <string name="early_access">抢先体验</string>

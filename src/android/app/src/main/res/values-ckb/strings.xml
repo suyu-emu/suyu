@@ -103,12 +103,12 @@
     <string name="about_app_description">ئیمۆلیتەرێکی سەرچاوە-کراوەی سویچ</string>
     <string name="contributors">بەشداربووان</string>
     <string name="contributors_description">دروستکراوە لەگەڵ \u2764 لەلایەن تیمەکەی یوزو</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="licenses_description">ئەو پڕۆژانەی کە یوزوی بۆ ئەندرۆید ڕەخساند</string>
     <string name="build">بونیات</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <!-- Early access upgrade strings -->
     <string name="early_access">بەزوویی دەسپێگەشتن</string>

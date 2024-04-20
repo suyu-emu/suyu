@@ -20,7 +20,7 @@ permissions: {}
 jobs:
   codespell:
     name: Check for spelling errors
-    runs-on: verify
+    runs-on: docker
     steps:
       - uses: https://code.forgejo.org/actions/checkout@v3
         with:

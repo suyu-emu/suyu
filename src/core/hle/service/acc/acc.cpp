@@ -323,7 +323,7 @@ public:
             {11, &IProfileCommon::LoadImage, "LoadImage"},
             {20, &IProfileCommon::GetImageSize, "GetLargeImageSize"}, // 18.0.0+
             {21, &IProfileCommon::LoadImage, "LoadLargeImage"},       // 18.0.0+
-            {30, nullptr, "GetImageId"},                              // 18.0.0+
+            {30, &IProfileCommon::Unknown, "GetImageId"},             // 18.0.0+
         };
 
         RegisterHandlers(functions);
@@ -494,6 +494,13 @@ protected:
         rb.Push(ResultSuccess);
     }
 
+    void Unknown(HLERequestContext& ctx) {
+        LOG_WARNING(Service_ACC, "(STUBBED) called");
+        IPC::ResponseBuilder rb{ctx, 3};
+        rb.Push(ResultSuccess);
+        rb.Push(0);
+    }
+
     ProfileManager& profile_manager;
     Common::UUID user_id{}; ///< The user id this profile refers to.
 };
@@ -509,7 +516,15 @@ class IProfileEditor final : public IProfileCommon {
 public:
     explicit IProfileEditor(Core::System& system_, Common::UUID user_id_,
                             ProfileManager& profile_manager_)
-        : IProfileCommon{system_, "IProfileEditor", true, user_id_, profile_manager_} {}
+        : IProfileCommon{system_, "IProfileEditor", true, user_id_, profile_manager_} {
+        // clang-format off
+        static const FunctionInfo functions[] = {
+            {30, &IProfileEditor::Unknown, "Unknown"},
+        };
+        // clang-format on
+
+        RegisterHandlers(functions);
+    }
 };
 
 class ISessionObject final : public ServiceFramework<ISessionObject> {

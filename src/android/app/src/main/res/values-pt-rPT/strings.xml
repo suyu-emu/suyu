@@ -167,7 +167,7 @@
     <string name="about_app_description">Um emulador Switch de código aberto</string>
     <string name="contributors">Contribuidores</string>
     <string name="contributors_description">Feito com \u2764 da equipa do Suyu</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="licenses_description">Projetos que tornam o suyu para Android possível</string>
     <string name="build">Versão</string>
     <string name="user_data">Dado de utilizados</string>
@@ -180,9 +180,9 @@
     <string name="user_data_import_success">Dados de utilizador importado com sucesso</string>
     <string name="user_data_export_cancelled">Exportação cancelada</string>
     <string name="user_data_import_failed_description">Verifiqua se as pastas de dados do utilizados estão na raiz da pasta zip e contêm um arquivo de configuração em config/config.ini e tenta novamente.</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <!-- Early access upgrade strings -->
     <string name="early_access">Acesso antecipado</string>

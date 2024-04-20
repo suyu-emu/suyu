@@ -153,6 +153,7 @@ enum class InfoType : u32 {
     ThreadTickCount = 25,
     IsSvcPermitted = 26,
     IoRegionHint = 27,
+    ReservedRegionExtraSize = 28,
 
     MesosphereMeta = 65000,
     MesosphereCurrentProcess = 65001,
@@ -642,9 +643,12 @@ enum class CreateProcessFlag : u32 {
     // 11.x+ DisableDeviceAddressSpaceMerge.
     DisableDeviceAddressSpaceMerge = (1 << 12),
 
+    EnableReservedRegionExtraSize = (1 << 13),
+
     // Mask of all flags.
     All = Is64Bit | AddressSpaceMask | EnableDebug | EnableAslr | IsApplication |
-          PoolPartitionMask | OptimizeMemoryAllocation | DisableDeviceAddressSpaceMerge,
+          PoolPartitionMask | OptimizeMemoryAllocation | DisableDeviceAddressSpaceMerge |
+          EnableReservedRegionExtraSize,
 };
 DECLARE_ENUM_FLAG_OPERATORS(CreateProcessFlag);
 

@@ -86,7 +86,7 @@
     <string name="about_app_description">Open-source Switch emulátor</string>
     <string name="contributors">Přispěvatelé</string>
     <string name="contributors_description">Vyrobeno s \u2764 od suyu týmu</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="build">Číslo sestavení</string>
     <string name="user_data">Uživatelská data</string>
     <string name="exporting_user_data">Exportování uživatelských dat...</string>
@@ -96,9 +96,9 @@
     <string name="user_data_export_success">Uživatelská data byla úspěšně exportována.</string>
     <string name="user_data_import_success">Uživatelská data byla úspěšně importována.</string>
     <string name="user_data_export_cancelled">Export zrušen</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <string name="play_store_link">https://play.google.com/store/apps/details?id=org.suyu.suyu_emu.ea</string>
     <string name="no_manual_installation">Žádná manuální instalace</string>

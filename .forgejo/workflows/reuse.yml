@@ -30,7 +30,7 @@ jobs:
 
   reuse:
     name: Check REUSE Specification
-    runs-on: verify
+    runs-on: docker
     if: ${{ github.repository == 'suyu/suyu' }}
     steps:
     - uses: https://code.forgejo.org/actions/checkout@v3

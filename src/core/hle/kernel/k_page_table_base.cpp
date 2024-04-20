@@ -172,6 +172,7 @@ Result KPageTableBase::InitializeForKernel(bool is_64_bit, KVirtualAddress start
     m_mapped_unsafe_physical_memory = 0;
     m_mapped_insecure_memory = 0;
     m_mapped_ipc_server_memory = 0;
+    m_alias_region_extra_size = 0;
 
     m_memory_block_slab_manager =
         m_kernel.GetSystemSystemResource().GetMemoryBlockSlabManagerPointer();
@@ -267,6 +268,12 @@ Result KPageTableBase::InitializeForProcess(Svc::CreateProcessFlag as_type, bool
         m_kernel_map_region_end = m_code_region_end;
         process_code_start = m_code_region_start;
         process_code_end = m_code_region_end;
+    }
+
+    m_alias_region_extra_size = 0;
+    if (as_type == Svc::CreateProcessFlag::EnableReservedRegionExtraSize) {
+        m_alias_region_extra_size = GetAddressSpaceSize() / 8;
+        alias_region_size += m_alias_region_extra_size;
     }
 
     // Set other basic fields.

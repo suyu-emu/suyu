@@ -163,7 +163,7 @@
     <string name="about_app_description">오픈 소스 Switch 에뮬레이터</string>
     <string name="contributors">기여자</string>
     <string name="contributors_description">suyu 팀의 \u2764로 제작</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="licenses_description">Android용 suyu를 가능하게 하는 프로젝트</string>
     <string name="build">빌드</string>
     <string name="user_data">유저 데이터</string>
@@ -176,9 +176,9 @@
     <string name="user_data_import_success">유저 데이터를 가져왔습니다.</string>
     <string name="user_data_export_cancelled">내보내기 취소됨</string>
     <string name="user_data_import_failed_description">유저 데이터 폴더가 ZIP 폴더의 루트 디렉토리에 위치하고 config/config.ini 구성 파일이 있는지 확인하고 다시 시도하세요.</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <!-- Early access upgrade strings -->
     <string name="early_access">앞서 해보기</string>

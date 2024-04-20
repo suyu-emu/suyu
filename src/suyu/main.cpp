@@ -1848,7 +1848,7 @@ bool GMainWindow::LoadROM(const QString& filename, Service::AM::FrontendAppletPa
                 const auto description =
                     tr("%1<br>Please follow <a href='https://suyu.dev/help/quickstart/'>the "
                        "suyu quickstart guide</a> to redump your files.<br>You can refer "
-                       "to the suyu wiki</a> or the suyu Discord</a> for help.",
+                       "to the suyu wiki</a> or the suyu Chat</a> for help.",
                        "%1 signifies an error string.")
                         .arg(QString::fromStdString(
                             GetResultStatusString(static_cast<Loader::ResultStatus>(error_id))));

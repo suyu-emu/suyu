@@ -163,7 +163,7 @@
     <string name="about_app_description">Emulator Switch Open-Source</string>
     <string name="contributors">Kontributor</string>
     <string name="contributors_description">Dibuat dengan \u2764 dari tim suyu</string>
-    <string name="contributors_link">https://github.com/suyu-emu/suyu/graphs/contributors</string>
+    <string name="contributors_link">https://git.suyu.dev/suyu/suyu/activity/</string>
     <string name="licenses_description">Proyek yang memungkinkan suyu untuk Android</string>
     <string name="build">Versi</string>
     <string name="user_data">Data pengguna</string>
@@ -176,9 +176,9 @@
     <string name="user_data_import_success">Berhasil mengimpor data pengguna</string>
     <string name="user_data_export_cancelled">Ekspor Dibatalkan</string>
     <string name="user_data_import_failed_description">Pastikan folder data pengguna berada di akar folder zip dan berisi file konfigurasi di config/config.ini dan coba lagi.</string>
-    <string name="support_link">https://discord.gg/suyu</string>
+    <string name="support_link">https://chat.suyu.dev/</string>
     <string name="website_link">https://suyu.dev/</string>
-    <string name="github_link">https://github.com/suyu-emu</string>
+    <string name="github_link">https://git.suyu.dev/</string>
 
     <!-- Early access upgrade strings -->
     <string name="early_access">Akses lebih awal</string>
