@@ -11,7 +11,6 @@ We do not support or condone piracy in any form. In order to use suyu, you'll ne
 We're in need of developers. Please join our chat below if you want to contribute!
 This repo was based on Yuzu EA 4176 but the code is being rewritten from the ground up for legal and performance reasons.
 
-Support the original suyu developer team [here](https://discord.gg/ajz5hdrZ)
 
 Support the original suyu developer team [here](https://discord.gg/ajz5hdrZ)
 <hr />
