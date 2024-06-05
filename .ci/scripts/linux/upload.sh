@@ -5,6 +5,7 @@
 
 . .ci/scripts/common/pre-upload.sh
 
+APPIMAGETOOL=$(wget -q https://api.github.com/repos/probonopd/go-appimage/releases -O - | sed 's/"/ /g; s/ /\n/g' | grep -o 'https.*continuous.*tool.*86_64.*mage$')
 APPIMAGE_NAME="suyu-${RELEASE_NAME}-${GITDATE}-${GITREV}.AppImage"
 BASE_NAME="suyu-linux"
 REV_NAME="${BASE_NAME}-${GITDATE}-${GITREV}"
@@ -27,7 +28,7 @@ fi
 # Build an AppImage
 cd build
 
-wget -nc https://gitlab.com/suyu-emu/ext-linux-bin/-/raw/main/appimage/appimagetool-x86_64.AppImage
+wget -nc "$APPIMAGETOOL" -O ./appimagetool-x86_64.AppImage
 chmod 755 appimagetool-x86_64.AppImage
 
 # if FUSE is not available, then fallback to extract and run
@@ -35,16 +36,14 @@ if ! ./appimagetool-x86_64.AppImage --version; then
     export APPIMAGE_EXTRACT_AND_RUN=1
 fi
 
-# Don't let AppImageLauncher ask to integrate EA
-if [ "${RELEASE_NAME}" = "mainline" ] || [ "${RELEASE_NAME}" = "early-access" ]; then
-    echo "X-AppImage-Integrate=false" >> AppDir/dev.suyu_emu.suyu.desktop
-fi
-
 if [ "${RELEASE_NAME}" = "mainline" ]; then
     # Generate update information if releasing to mainline
-    ./appimagetool-x86_64.AppImage -u "gh-releases-zsync|suyu-emu|suyu-${RELEASE_NAME}|latest|suyu-*.AppImage.zsync" AppDir "${APPIMAGE_NAME}"
+	# ./appimagetool-x86_64.AppImage -u "gh-releases-zsync|suyu-emu|suyu-${RELEASE_NAME}|latest|suyu-*.AppImage.zsync" AppDir "${APPIMAGE_NAME}"
+	# Go appimagetool needs to have a VERSION and ARCH defined to make the appimage
+    ARCH=x86_64 VERSION="${GITREV}" ./appimagetool-x86_64.AppImage -s ./*AppDir && mv ./*suyu*AppImage ./"$APPIMAGE_NAME"
 else
-    ./appimagetool-x86_64.AppImage AppDir "${APPIMAGE_NAME}"
+	# Go appimagetool needs to have a VERSION and ARCH defined to make the appimage
+    ARCH=x86_64 VERSION="${GITREV}" ./appimagetool-x86_64.AppImage -s ./*AppDir && mv ./*suyu*AppImage ./"$APPIMAGE_NAME"
 fi
 cd ..
 
